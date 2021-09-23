@@ -41,7 +41,7 @@ function shadow(xoff, yoff) {
 function populateNumList(listSize, maxNum) {
     resList = [];
     for (var i = 0; i < listSize; i++) {
-        resList[i] = Math.floor(Math.random() * maxNum) + 1;
+        resList[i] = random(1, maxNum);
     }
     return resList;
 }
@@ -53,12 +53,11 @@ function drawNumList() {
     for (var i = 0; i < size; i++) {
         strokeWeight(10);
         stroke(0);
-        line(currentPosX, currentPosY, currentPosX, currentPosY - numList[i]);
+        line(currentPosX, currentPosY, currentPosX, currentPosY - 2 * numList[i]);
         currentPosX += 15;
     }
 }
 
 function sortList() {
     numList.sort();
-    print(numList);
 }
