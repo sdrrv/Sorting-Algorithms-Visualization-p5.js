@@ -1,28 +1,58 @@
+let sortingAlgorithms = ["Selection Sort", "Buble Sort", "Quick Sort", "Merge Sort"]
+
 function setup() {
     createCanvas(windowWidth, windowHeight);
+    // -----------Size-Slider----------------
     sizeSlider = createSlider(10, 95, 25, 5);
-    sizeSlider.position(windowWidth * 0.01, windowHeight * 0.01);
+    sizeSlider.position(windowWidth * 0.01, windowHeight * 0.04);
     sizeSlider.style('width', '100px');
     size = 25;
     numList = populateNumList(size, 100);
+    // ------------Speed-Slider-------------------------
+    speedSlider = createSlider(0, 100, 50, 5);
+    speedSlider.position(windowWidth * 0.2, windowHeight * 0.04);
+    speedSlider.style('width', '100px');
+    speed = 50;
+    // --------------------------------------------------
 
 
+
+    chooseBar(windowWidth * 0.85, windowHeight * 0.02)
     noStroke();
     fill(250);
     sortButton = createButton("Sort!");
     sortButton.position(windowWidth * 0.95, windowHeight * 0.02);
     sortButton.size(windowWidth / windowHeight * 25);
     sortButton.mousePressed(sortList);
+
+
+    print(speedSlider.x)
 }
 
 function draw() {
     background(220);
+    //----Array-Size---------
+    strokeWeight(1);
+    textSize(15);
+    fill(0);
+    text("Array Size", sizeSlider.x + (sizeSlider.width / 2), windowHeight * 0.03);
     //----Size-Text----------
     strokeWeight(1);
     textSize(25);
     fill(0);
-    text(sizeSlider.value(), sizeSlider.size().width / 2, windowHeight * 0.08);
+    text(sizeSlider.value(), sizeSlider.x + (sizeSlider.width / 2), windowHeight * 0.1);
+    //----Speed---------
+    strokeWeight(1);
+    textSize(15);
+    fill(0);
+    text("Speed", speedSlider.x + (speedSlider.width / 2), windowHeight * 0.03);
+    //----Speed-Text----------
+    strokeWeight(1);
+    textSize(25);
+    fill(0);
+    text(speedSlider.value() + "%", speedSlider.x + (speedSlider.width / 2), windowHeight * 0.1);
     //-----------------------
+
     if (sizeSlider.value() != size) {
         size = sizeSlider.value();
         numList = populateNumList(size, 100);
@@ -31,15 +61,9 @@ function draw() {
     drawNumList();
 }
 
-function shadow(xoff, yoff) {
-    drawingContext.shadowOffsetX = xoff;
-    drawingContext.shadowOffsetY = yoff;
-    drawingContext.shadowBlur = 2;
-    drawingContext.shadowColor = "black";
-}
 
 function populateNumList(listSize, maxNum) {
-    resList = [];
+    let resList = [];
     for (var i = 0; i < listSize; i++) {
         resList[i] = random(1, maxNum);
     }
@@ -48,8 +72,8 @@ function populateNumList(listSize, maxNum) {
 
 function drawNumList() {
 
-    currentPosX = windowWidth * (0.39 - (0.38 / 70) * (size - 25));
-    currentPosY = windowHeight * 0.98;
+    let currentPosX = windowWidth * (0.39 - (0.38 / 70) * (size - 25));
+    let currentPosY = windowHeight * 0.98;
     for (var i = 0; i < size; i++) {
         strokeWeight(10);
         stroke(0);
@@ -59,5 +83,38 @@ function drawNumList() {
 }
 
 function sortList() {
-    numList.sort();
+    numList = selectionSort(numList);
+}
+
+function chooseBar(X, Y) {
+    textAlign(CENTER);
+    background(200);
+    sel = createSelect();
+    sel.position(X, Y);
+    for (var i in sortingAlgorithms) {
+        sel.option(sortingAlgorithms[i])
+    }
+    //sel.selected('kiwi');
+    //sel.changed(mySelectEvent);
+}
+
+function selectionSort(inputArr) {
+    let n = inputArr.length;
+
+    for (let i = 0; i < n; i++) {
+        // Finding the smallest number in the subarray
+        let min = i;
+        for (let j = i + 1; j < n; j++) {
+            if (inputArr[j] < inputArr[min]) {
+                min = j;
+            }
+        }
+        if (min != i) {
+            // Swapping the elements
+            let tmp = inputArr[i];
+            inputArr[i] = inputArr[min];
+            inputArr[min] = tmp;
+        }
+    }
+    return inputArr;
 }
