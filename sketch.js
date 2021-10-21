@@ -1,4 +1,4 @@
-let sortingAlgorithms = ["Buble Sort", "Merge Sort", "Quick Sort"]
+let sortingAlgorithms = ["Selection Sort", "Buble Sort", "Quick Sort", "Merge Sort"]
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
@@ -83,7 +83,7 @@ function drawNumList() {
 }
 
 function sortList() {
-    numList.sort();
+    numList = selectionSort(numList);
 }
 
 function chooseBar(X, Y) {
@@ -96,4 +96,25 @@ function chooseBar(X, Y) {
     }
     //sel.selected('kiwi');
     //sel.changed(mySelectEvent);
+}
+
+function selectionSort(inputArr) {
+    let n = inputArr.length;
+
+    for (let i = 0; i < n; i++) {
+        // Finding the smallest number in the subarray
+        let min = i;
+        for (let j = i + 1; j < n; j++) {
+            if (inputArr[j] < inputArr[min]) {
+                min = j;
+            }
+        }
+        if (min != i) {
+            // Swapping the elements
+            let tmp = inputArr[i];
+            inputArr[i] = inputArr[min];
+            inputArr[min] = tmp;
+        }
+    }
+    return inputArr;
 }
