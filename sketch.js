@@ -83,7 +83,8 @@ function draw() {
             numList = sortedList[currentIndex];
             step = (100 - speedSlider.value());
             currentIndex += 1;
-            blopAudio.play();
+            if (!muted)
+                blopAudio.play();
         } else {
             step -= 1;
         }
@@ -193,6 +194,6 @@ function mute() {
         muteButton.html("Mute");
     } else {
         muted = true;
-        muteButton.html("unMute")
+        muteButton.html("Muted")
     }
 }
