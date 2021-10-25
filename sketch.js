@@ -62,16 +62,14 @@ function draw() {
     }
 
     if (sorting) {
-        if (currentIndex >= size - 1) {
+        if (currentIndex >= sortedList.length - 1) {
             step = 0;
             sorting = false;
             currentIndex = 0;
-            //reShuffle();
         } else if (step <= 0) {
             numList = sortedList[currentIndex];
-            step = (110 - speedSlider.value());
+            step = (100 - speedSlider.value());
             currentIndex += 1;
-            print(currentIndex);
         } else {
             step -= 1;
         }
@@ -144,12 +142,17 @@ function selectionSort(inputArr) { //
         let min = i;
         for (let j = i + 1; j < n; j++) {
             if (inputArr[j].value < inputArr[min].value) {
+                inputArr[min].color = color(0);
                 min = j;
+                inputArr[min].color = color(0, 200, 0);
+                res.push(cloner(inputArr));
+            } else {
+                inputArr[j].color = color(200, 0, 0);
+                res.push(cloner(inputArr));
+                inputArr[j].color = color(0);
             }
-            //inputArr[min].color = color(0, 200, 0);
-            //res.push(cloner(inputArr));
-            //inputArr[min].color = color(0);
         }
+        inputArr[min].color = color(0);
         if (min != i) {
             // Swapping the elements
             let tmp = inputArr[i].value;
@@ -157,9 +160,7 @@ function selectionSort(inputArr) { //
             inputArr[min].value = tmp;
         }
 
-        //inputArr[i].color = color(200, 0, 0);
         res.push(cloner(inputArr));
-        //inputArr[i].color = color(0);
     }
     return res;
 }
