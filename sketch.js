@@ -1,14 +1,13 @@
 let sortingAlgorithms = ["Selection Sort", "Bubble Sort", "Quick Sort", "Merge Sort"]
 let sorting = false;
 let sortedList = [];
-
 let currentIndex = 0;
 let step = 0;
 
 function setup() {
     createCanvas(windowWidth, windowHeight);
     // -----------Size-Slider----------------
-    sizeSlider = createSlider(10, 95, 50, 5);
+    sizeSlider = createSlider(5, 95, 50, 5);
     sizeSlider.position(windowWidth * 0.01, windowHeight * 0.04);
     sizeSlider.style('width', '100px');
     size = 25;
@@ -66,14 +65,18 @@ function draw() {
         if (currentIndex >= size - 1) {
             step = 0;
             sorting = false;
+            currentIndex = 0;
             //reShuffle();
         } else if (step <= 0) {
-            numList = sortList[currentIndex];
-            step = (110 - sizeSlider.value());
+            numList = sortedList[currentIndex];
+            step = (110 - speedSlider.value());
+            currentIndex += 1;
+            print(currentIndex);
         } else {
-            step += 1;
+            step -= 1;
         }
         drawNumList();
+
     } else {
         drawNumList();
     }
@@ -83,9 +86,7 @@ function draw() {
 function populateNumList(listSize, maxNum) { // Remake a list
     let resList = [];
     for (var i = 0; i < listSize; i++) {
-        resList[i] = [];
-        resList[i][0] = random(1, maxNum);
-        resList[i][1] = color(0, 0, 0);
+        resList[i] = new Element(random(1, maxNum), color(0));
     }
     return resList;
 }
@@ -96,15 +97,24 @@ function drawNumList() { // Draw the list
     let currentPosY = windowHeight * 0.98;
     for (var i = 0; i < size; i++) {
         strokeWeight(10);
-        stroke(numList[i][1]);
-        line(currentPosX, currentPosY, currentPosX, currentPosY - 2 * numList[i][0]);
+        stroke(numList[i].color);
+
+        line(currentPosX, currentPosY, currentPosX, currentPosY - 2 * numList[i].value);
         currentPosX += 15;
+    }
+}
+
+function debug(array) {
+    print("------------------------------------------------------------------")
+    for (var i = 0; i < array.length; i++) {
+        print(i + "---->" + array[i].value + " " + array[i].color);
     }
 }
 
 
 function sortList() {
     sortedList = selectionSort(numList);
+    //print(sortedList);
     sorting = true;
 }
 
@@ -121,26 +131,43 @@ function chooseBar(X, Y) {
 }
 
 function reShuffle() {
+    sorting = false;
     numList = populateNumList(size, 100);
 }
 
 function selectionSort(inputArr) { // 
+    let res = []
     let n = inputArr.length;
-
+    //debug(inputArr);
     for (let i = 0; i < n; i++) {
         // Finding the smallest number in the subarray
         let min = i;
         for (let j = i + 1; j < n; j++) {
-            if (inputArr[j] < inputArr[min]) {
+            if (inputArr[j].value < inputArr[min].value) {
                 min = j;
             }
+            //inputArr[min].color = color(0, 200, 0);
+            //res.push(cloner(inputArr));
+            //inputArr[min].color = color(0);
         }
         if (min != i) {
             // Swapping the elements
-            let tmp = inputArr[i];
-            inputArr[i] = inputArr[min];
-            inputArr[min] = tmp;
+            let tmp = inputArr[i].value;
+            inputArr[i].value = inputArr[min].value;
+            inputArr[min].value = tmp;
         }
+
+        //inputArr[i].color = color(200, 0, 0);
+        res.push(cloner(inputArr));
+        //inputArr[i].color = color(0);
     }
-    return inputArr;
+    return res;
+}
+
+function cloner(list) {
+    let res1 = [];
+    for (var i = 0; i < list.length; i++) {
+        res1.push(new Element(list[i].value, list[i].color));
+    }
+    return res1;
 }
