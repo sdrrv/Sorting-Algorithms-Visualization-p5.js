@@ -4,7 +4,16 @@ let sortedList = [];
 let currentIndex = 0;
 let step = 0;
 
+
+var blopAudio;
+var muted = false;
+
+function preload() {
+    blopAudio = loadSound("./sounds/Blop.mp3");
+}
+
 function setup() {
+    blopAudio.playMode("sustain")
     createCanvas(windowWidth, windowHeight);
     // -----------Size-Slider----------------
     sizeSlider = createSlider(5, 95, 50, 5);
@@ -29,6 +38,10 @@ function setup() {
     reShuffleButton = createButton("ReShuffle");
     reShuffleButton.position(windowWidth * 0.78, windowHeight * 0.02);
     reShuffleButton.mousePressed(reShuffle);
+    // ---------------------------------------------------
+    muteButton = createButton("Mute");
+    muteButton.position(windowWidth * 0.95, windowHeight * 0.15);
+    muteButton.mousePressed(mute);
 }
 
 function draw() {
@@ -70,6 +83,7 @@ function draw() {
             numList = sortedList[currentIndex];
             step = (100 - speedSlider.value());
             currentIndex += 1;
+            blopAudio.play();
         } else {
             step -= 1;
         }
@@ -171,4 +185,14 @@ function cloner(list) {
         res1.push(new Element(list[i].value, list[i].color));
     }
     return res1;
+}
+
+function mute() {
+    if (muted) {
+        muted = false;
+        muteButton.html("Mute");
+    } else {
+        muted = true;
+        muteButton.html("unMute")
+    }
 }
