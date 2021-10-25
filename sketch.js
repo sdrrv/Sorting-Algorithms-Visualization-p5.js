@@ -4,16 +4,18 @@ let sortedList = [];
 let currentIndex = 0;
 let step = 0;
 
-
+var finishAudio;
 var blopAudio;
 var muted = false;
 
 function preload() {
     blopAudio = loadSound("./sounds/Blop.mp3");
+    finishAudio = loadSound("./sounds/Finish.mp3");
+
 }
 
 function setup() {
-    blopAudio.playMode("sustain")
+    blopAudio.playMode("sustain");
     createCanvas(windowWidth, windowHeight);
     // -----------Size-Slider----------------
     sizeSlider = createSlider(5, 95, 50, 5);
@@ -26,7 +28,7 @@ function setup() {
     speedSlider.position(windowWidth * 0.2, windowHeight * 0.04);
     speedSlider.style('width', '100px');
     // --------------------------------------------------
-    chooseBar(windowWidth * 0.85, windowHeight * 0.02) // choose algo
+    chooseBar(windowWidth * 0.85, windowHeight * 0.02); // choose algo
     noStroke();
     fill(250);
     sortButton = createButton("Sort!");
@@ -79,6 +81,10 @@ function draw() {
             step = 0;
             sorting = false;
             currentIndex = 0;
+            if (!muted) {
+                blopAudio.stop();
+                finishAudio.play();
+            }
         } else if (step <= 0) {
             numList = sortedList[currentIndex];
             step = (100 - speedSlider.value());
